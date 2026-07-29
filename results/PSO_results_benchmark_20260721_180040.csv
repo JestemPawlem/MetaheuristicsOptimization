@@ -1,3 +1,0 @@
-objective,dimensionality,population_size,num_iterations
-rastrigin,3,50,150
-inertia,acc_coef_1,acc_coef_2,best_value,average_value_top_80,median_value,stddev_value,average_time_ms
