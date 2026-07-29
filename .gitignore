@@ -16,5 +16,5 @@
 
 .venv
 
-results/
-*.csv
+results/*
+!results/.gitkeep
