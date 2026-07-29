@@ -13,3 +13,7 @@
 *.a
 *.so
 *.dylib
+
+.venv
+
+results/
