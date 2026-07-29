@@ -1,0 +1,15 @@
+/out/
+
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.lib
+*.a
+*.so
+*.dylib
