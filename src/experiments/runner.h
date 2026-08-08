@@ -12,6 +12,7 @@
 #include <string_view>
 #include <utility>
 
+#include <mh/core/hyperparams.h>
 #include <mh/utils/csv_writer.h>
 #include <mh/utils/statistics.h>
 
@@ -30,7 +31,7 @@ namespace experiments
 		"average_time_ms"
 	};
 
-	template <template <typename> typename Algorithm, typename Hyperparams>
+	template <template <typename> typename Algorithm, mh::core::hyperparams Hyperparams>
 	void run_single(
 		const Hyperparams& params,
 		std::size_t id,
@@ -79,7 +80,7 @@ namespace experiments
 			log_str);
 	}
 
-	template <template <typename> typename Algorithm, typename Hyperparams>
+	template <template <typename> typename Algorithm, mh::core::hyperparams Hyperparams>
 	void run_hyperparam_grid_parallel(
 		const Hyperparams& params,
 		mh::utils::csv_writer& csv_writer)
@@ -102,7 +103,7 @@ namespace experiments
 			});
 	}
 
-	template <template <typename> typename Algorithm, typename Hyperparams>
+	template <template <typename> typename Algorithm, mh::core::hyperparams Hyperparams>
 	void run_experiment(
 		std::string_view algo_name,
 		std::string_view objective_name,

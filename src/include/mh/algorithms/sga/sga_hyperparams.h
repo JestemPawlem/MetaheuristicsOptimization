@@ -38,16 +38,6 @@ namespace mh::algorithms::sga
 		static constexpr std::size_t n_csv_meta_params = 4;
 		static constexpr std::size_t n_log_params = 7;
 
-	private:
-		objective_t objective_;
-
-		std::array<sga::selection_operator<value_type, dimension, population_size>, SelectionsSize> selections_;
-		std::array<sga::crossover_operator<value_type, dimension>, CrossoversSize> crossovers_;
-		std::array<sga::mutation_operator<value_type, dimension>, MutationsSize> mutations_;
-		std::array<value_type, CrossoverProbsSize> crossover_probs_;
-		std::array<value_type, MutationProbsSize> mutation_probs_;
-
-	public:
 		static constexpr std::array<std::string_view, n_csv_params> csv_headers =
 		{
 			"selection",
@@ -71,8 +61,8 @@ namespace mh::algorithms::sga
 			std::array<sga::crossover_operator<value_type, dimension>, CrossoversSize> crossovers,
 			std::array<sga::mutation_operator<value_type, dimension>, MutationsSize> mutations,
 			std::array<value_type, CrossoverProbsSize> crossover_probs,
-			std::array<value_type, MutationProbsSize> mutation_probs)
-			: objective_(objective),
+			std::array<value_type, MutationProbsSize> mutation_probs) :
+			objective_(objective),
 			selections_(selections),
 			crossovers_(crossovers),
 			mutations_(mutations),
@@ -161,6 +151,15 @@ namespace mh::algorithms::sga
 				core::field_t{ "mutation_prob", std::format("{:<7.5f}", mutation_prob(id)) }
 			};
 		}
+
+	private:
+		objective_t objective_;
+
+		std::array<sga::selection_operator<value_type, dimension, population_size>, SelectionsSize> selections_;
+		std::array<sga::crossover_operator<value_type, dimension>, CrossoversSize> crossovers_;
+		std::array<sga::mutation_operator<value_type, dimension>, MutationsSize> mutations_;
+		std::array<value_type, CrossoverProbsSize> crossover_probs_;
+		std::array<value_type, MutationProbsSize> mutation_probs_;
 	};
 
 	template <

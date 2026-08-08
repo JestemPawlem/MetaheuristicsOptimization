@@ -24,8 +24,6 @@ namespace mh::algorithms::pso
 		using value_type = typename Objective::value_type;
 
 		static constexpr std::size_t dimension = Objective::dimension;
-		static constexpr std::size_t population_size = PopulationSize;
-		static constexpr std::size_t num_iterations = NumIterations;
 
 		static constexpr std::size_t grid_size =
 			InertiasSize * AccCoefs1Size * AccCoefs2Size;
@@ -34,14 +32,9 @@ namespace mh::algorithms::pso
 		static constexpr std::size_t n_csv_meta_params = 4;
 		static constexpr std::size_t n_log_params = 5;
 
-	private:
-		objective_t objective_;
+		static constexpr std::size_t population_size = PopulationSize;
+		static constexpr std::size_t num_iterations = NumIterations;
 
-		std::array<value_type, InertiasSize> inertias_;
-		std::array<value_type, AccCoefs1Size> acc_coefs_1_;
-		std::array<value_type, AccCoefs2Size> acc_coefs_2_;
-
-	public:
 		static constexpr std::array<std::string_view, n_csv_params> csv_headers =
 		{
 			"inertia",
@@ -61,8 +54,8 @@ namespace mh::algorithms::pso
 			objective_t objective,
 			std::array<value_type, InertiasSize> inertias,
 			std::array<value_type, AccCoefs1Size> acc_coefs_1,
-			std::array<value_type, AccCoefs2Size> acc_coefs_2)
-			: objective_(objective),
+			std::array<value_type, AccCoefs2Size> acc_coefs_2) :
+			objective_(objective),
 			inertias_(inertias),
 			acc_coefs_1_(acc_coefs_1),
 			acc_coefs_2_(acc_coefs_2)
@@ -129,6 +122,13 @@ namespace mh::algorithms::pso
 				core::field_t{ "acc_coef_2", std::format("{:.5f}", acc_coef_2(id)) }
 			};
 		}
+
+	private:
+		objective_t objective_;
+
+		std::array<value_type, InertiasSize> inertias_;
+		std::array<value_type, AccCoefs1Size> acc_coefs_1_;
+		std::array<value_type, AccCoefs2Size> acc_coefs_2_;
 	};
 
 
