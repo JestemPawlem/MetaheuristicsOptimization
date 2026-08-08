@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <cmath>
 #include <cstddef>
 
@@ -14,7 +13,7 @@ namespace mh::objectives
 	template <traits::ieee754_fp T, std::size_t Dim>
 	struct schwefel
 	{
-		constexpr T operator()(const std::array<T, Dim>& x) const noexcept
+		constexpr T operator()(const T* __restrict x) const noexcept
 		{
 			T sum{};
 

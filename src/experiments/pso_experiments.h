@@ -14,13 +14,13 @@ namespace experiments::pso
 		namespace pso = mh::algorithms::pso;
 
 		using T = float;
-		constexpr std::size_t dimension = 4;
-		constexpr std::size_t population_size = 64;
-		constexpr std::size_t num_iterations = 128;
+		constexpr std::size_t dimension = 3;
+		constexpr std::size_t population_size = 50;
+		constexpr std::size_t num_iterations = 150;
 
-		constexpr auto inertias = mh::utils::series::linear<4>(T{ 0.4 }, T{ 0.8 });
-		constexpr auto c1_series = mh::utils::series::exponential<64>(T{ 0.2 }, T{ 4.0 });
-		constexpr auto c2_series = mh::utils::series::exponential<64>(T{ 0.2 }, T{ 4.0 });
+		constexpr auto inertias = mh::utils::series::linear<5>(T{ 0.4 }, T{ 0.8 });
+		constexpr auto c1_series = mh::utils::series::exponential<80>(T{ 0.2 }, T{ 4.0 });
+		constexpr auto c2_series = mh::utils::series::exponential<80>(T{ 0.2 }, T{ 4.0 });
 
 
 		auto params = pso::make_hyperparams<population_size, num_iterations>(

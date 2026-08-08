@@ -156,6 +156,8 @@ namespace mh::algorithms::sga
 		std::array<value_type, MutationProbsSize> mutation_probs_;
 	};
 
+
+	// deduction guide
 	template <
 		std::size_t PopulationSize,
 		std::size_t NumIterations,

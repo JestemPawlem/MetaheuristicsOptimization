@@ -127,6 +127,7 @@ namespace mh::algorithms::pso
 	};
 
 
+	// deduction guide
 	template <
 		std::size_t PopulationSize,
 		std::size_t NumIterations,

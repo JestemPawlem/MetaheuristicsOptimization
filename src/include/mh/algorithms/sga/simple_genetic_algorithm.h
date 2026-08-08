@@ -8,7 +8,7 @@
 
 #include <mh/algorithms/sga/crossover.h>
 #include <mh/algorithms/sga/mutation.h>
-#include <mh/algorithms//sga/selection.h>
+#include <mh/algorithms/sga/selection.h>
 #include <mh/utils/random.h>
 
 
@@ -25,22 +25,6 @@ namespace mh::algorithms::sga
 
 		static constexpr std::size_t population_size_flat =
 			population_size * Dim;
-
-
-		static void evaluate(
-			const std::array<T, population_size_flat>& population,
-			std::array<T, population_size>& fitnesses,
-			std::size_t index,
-			const auto& objective)
-		{
-			std::array<T, Dim> point{};
-			const std::size_t offset = index * Dim;
-
-			for (std::size_t d{}; d < Dim; ++d)
-				point[d] = population[offset + d];
-
-			fitnesses[index] = objective(point);
-		}
 
 
 		static T run(const Hyperparams& params, std::size_t id)
@@ -72,7 +56,7 @@ namespace mh::algorithms::sga
 					population[i * Dim + d] =
 					lower_bound + random::value<T>() * range;
 
-				evaluate(population, fitnesses, i, objective);
+				fitnesses[i] = objective(population.data() + i * Dim);
 			}
 
 
@@ -116,8 +100,8 @@ namespace mh::algorithms::sga
 					mutation(parent1, mutation_prob, lower_bound, upper_bound);
 					mutation(parent2, mutation_prob, lower_bound, upper_bound);
 
-					evaluate(next_population, next_fitnesses, j, objective);
-					evaluate(next_population, next_fitnesses, j + 1, objective);
+					next_fitnesses[j] = objective(next_population.data() + j * Dim);
+					next_fitnesses[j + 1] = objective(next_population.data() + (j + 1) * Dim);
 				}
 
 

@@ -71,18 +71,15 @@ namespace mh::algorithms::pso
 						positions[offset + d];
 				}
 
-				std::array<T, Dim> position{};
-				for (std::size_t d{}; d < Dim; ++d)
-					position[d] = positions[offset + d];
-
-				const T fitness = objective(position);
+				const T fitness = objective(positions.data() + offset);
 
 				best_personal_fitnesses[p] = fitness;
 
 				if (fitness < best_global_fitness)
 				{
 					best_global_fitness = fitness;
-					best_global_position = position;
+					std::copy_n(positions.data() + offset, Dim,
+						best_global_position.begin());
 				}
 			}
 
@@ -121,13 +118,7 @@ namespace mh::algorithms::pso
 							upper_bound);
 					}
 
-
-					std::array<T, Dim> position{};
-					for (std::size_t d{}; d < Dim; ++d)
-						position[d] = positions[offset + d];
-
-
-					const T fitness = objective(position);
+					const T fitness = objective(positions.data() + offset);
 
 					if (fitness < best_personal_fitnesses[p])
 					{
@@ -140,7 +131,8 @@ namespace mh::algorithms::pso
 						if (fitness < best_global_fitness)
 						{
 							best_global_fitness = fitness;
-							best_global_position = position;
+							std::copy_n(positions.data() + offset, Dim,
+								best_global_position.begin());
 						}
 					}
 				}
