@@ -3,9 +3,8 @@
 #include <array>
 #include <cstddef>
 #include <format>
+#include <print>
 #include <string_view>
-
-#include <mh/core/field.h>
 
 
 namespace mh::algorithms::pso
@@ -30,7 +29,6 @@ namespace mh::algorithms::pso
 
 		static constexpr std::size_t n_csv_params = 3;
 		static constexpr std::size_t n_csv_meta_params = 4;
-		static constexpr std::size_t n_log_params = 5;
 
 		static constexpr std::size_t population_size = PopulationSize;
 		static constexpr std::size_t num_iterations = NumIterations;
@@ -111,16 +109,13 @@ namespace mh::algorithms::pso
 			};
 		}
 
-		std::array<core::field_t, n_log_params> log_params(std::size_t id) const
+		void print_log(std::size_t id) const
 		{
-			return
-			{
-				core::field_t{ "objective", objective_.name },
-				core::field_t{ "dimensionality", std::to_string(dimension) },
-				core::field_t{ "inertia", std::format("{:.5f}", inertia(id)) },
-				core::field_t{ "acc_coef_1", std::format("{:.5f}", acc_coef_1(id)) },
-				core::field_t{ "acc_coef_2", std::format("{:.5f}", acc_coef_2(id)) }
-			};
+			std::println("[{:>6}/{}] inertia: {:.5f} | acc coef 1: {:.5f} | acc coef 2: {:.5f}",
+				id + 1, grid_size,
+				inertia(id),
+				acc_coef_1(id),
+				acc_coef_2(id));
 		}
 
 	private:

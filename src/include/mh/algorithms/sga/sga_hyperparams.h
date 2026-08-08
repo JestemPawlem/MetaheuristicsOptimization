@@ -6,8 +6,6 @@
 #include <format>
 #include <string_view>
 
-#include <mh/core/field.h>
-
 
 namespace mh::algorithms::sga
 {
@@ -36,7 +34,6 @@ namespace mh::algorithms::sga
 
 		static constexpr std::size_t n_csv_params = 5;
 		static constexpr std::size_t n_csv_meta_params = 4;
-		static constexpr std::size_t n_log_params = 7;
 
 		static constexpr std::array<std::string_view, n_csv_params> csv_headers =
 		{
@@ -138,18 +135,15 @@ namespace mh::algorithms::sga
 			};
 		}
 
-		std::array<core::field_t, n_log_params> log_params(std::size_t id) const
+		void print_log(std::size_t id) const
 		{
-			return
-			{
-				core::field_t{ "objective", objective_.name },
-				core::field_t{ "dimensionality", std::to_string(dimension) },
-				core::field_t{ "selection", std::format("{:<16}", selection(id).name) },
-				core::field_t{ "crossover", std::format("{:<10}", crossover(id).name) },
-				core::field_t{ "mutation", std::format("{:<10}", mutation(id).name) },
-				core::field_t{ "crossover_prob", std::format("{:<7.5f}", crossover_prob(id)) },
-				core::field_t{ "mutation_prob", std::format("{:<7.5f}", mutation_prob(id)) }
-			};
+			std::println("[{:>6}/{}] selection: {:<16} | crossover: {:<10} | mutation: {:<10} | crossover_prob: {:<7.5f} | mutation_prob: {:<7.5f}",
+				id + 1, grid_size,
+				selection(id).name,
+				crossover(id).name,
+				mutation(id).name,
+				crossover_prob(id),
+				mutation_prob(id));
 		}
 
 	private:

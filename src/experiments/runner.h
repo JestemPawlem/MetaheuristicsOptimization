@@ -67,17 +67,7 @@ namespace experiments
 			csv_writer.write_row(std::span<const std::string>(row));
 		}
 
-		const auto log_fields = params.log_params(id);
-		std::string log_str;
-		for (const auto& field : log_fields)
-		{
-			log_str += std::format("{}: {} ", field.name, field.value);
-		}
-
-		std::println("[{:>5}/{}] {}",
-			id + 1,
-			Hyperparams::grid_size,
-			log_str);
+		params.print_log(id);
 	}
 
 	template <template <typename> typename Algorithm, mh::core::hyperparams Hyperparams>

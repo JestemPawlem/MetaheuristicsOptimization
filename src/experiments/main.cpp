@@ -3,7 +3,7 @@
 
 int main()
 {
-	experiments::pso::run_all();
+	//experiments::pso::run_all();
 	//experiments::sga::run_all();
 
 	return 0;
