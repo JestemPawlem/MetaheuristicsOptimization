@@ -14,12 +14,14 @@ namespace mh::objectives
 	{
 		constexpr T operator()(const T* __restrict x) const noexcept
 		{
+			using namespace utils::math;
+
 			T result{};
 
 			for (std::size_t i{}; i < Dim - 1; ++i)
 			{
-				T xi = x[i] - sqrt_2<T>;
-				T xi1 = x[i + 1] - sqrt_2<T>;
+				T xi = x[i];
+				T xi1 = x[i + 1];
 				T term1 = xi1 - pow2(xi);
 				T term2 = T{ 1 } - xi;
 
@@ -33,9 +35,11 @@ namespace mh::objectives
 	template <traits::ieee754_fp T, std::size_t Dim>
 	auto rosenbrock_objective()
 	{
-		return objective<rosenbrock<T, Dim>, T, Dim>
+		using namespace utils::math;
+
+		return core::objective<rosenbrock<T, Dim>, T, Dim>
 		{
-			{ T{ -5 + sqrt_2<T> }, T{ 10 + sqrt_2<T> } },
+			{ T{ -5 }, T{ 10 } },
 				"rosenbrock"
 		};
 	}

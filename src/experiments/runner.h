@@ -18,7 +18,7 @@
 
 namespace experiments
 {
-	constexpr std::size_t num_trials = 100;
+	constexpr std::size_t num_trials = 1000;
 	constexpr float top_percent = 0.8f;
 
 	static constexpr std::size_t n_stats_csv_params = 5;
@@ -47,7 +47,7 @@ namespace experiments
 			top_percent);
 
 		constexpr std::size_t n_params =
-			Hyperparams::n_csv_params + n_stats_csv_params;
+			Hyperparams::csv_headers.size() + n_stats_csv_params;
 		std::array<std::string, n_params> row{};
 
 		const auto algorithm_params = params.csv_params(id);
@@ -100,7 +100,7 @@ namespace experiments
 		const Hyperparams& params)
 	{
 		constexpr std::size_t n_headers =
-			Hyperparams::n_csv_params + n_stats_csv_params;
+			Hyperparams::csv_headers.size() + n_stats_csv_params;
 		std::array<std::string_view, n_headers> headers{};
 
 		std::size_t i{};

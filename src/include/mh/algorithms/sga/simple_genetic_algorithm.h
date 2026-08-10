@@ -3,18 +3,14 @@
 #include <algorithm>
 #include <array>
 #include <cstddef>
-#include <iterator>
-#include <utility>
 
-#include <mh/algorithms/sga/crossover.h>
-#include <mh/algorithms/sga/mutation.h>
-#include <mh/algorithms/sga/selection.h>
+#include <mh/core/hyperparams.h>
 #include <mh/utils/random.h>
 
 
 namespace mh::algorithms::sga
 {
-	template <typename Hyperparams>
+	template <core::hyperparams Hyperparams>
 	struct real_coded_genetic_algorithm
 	{
 		using T = typename Hyperparams::value_type;
@@ -32,6 +28,8 @@ namespace mh::algorithms::sga
 			namespace random = utils::random;
 
 			const auto& objective = params.objective();
+			const auto [lower_bound, upper_bound] = objective.bounds;
+			const T range = upper_bound - lower_bound;
 
 			const auto& selection = params.selection(id);
 			const auto& crossover = params.crossover(id);
@@ -39,16 +37,12 @@ namespace mh::algorithms::sga
 
 			const T crossover_prob = params.crossover_prob(id);
 			const T mutation_prob = params.mutation_prob(id);
-			const auto [lower_bound, upper_bound] = objective.bounds;
 
 			std::array<T, population_size_flat> population{};
 			std::array<T, population_size> fitnesses{};
 
 			std::array<T, population_size_flat> next_population{};
 			std::array<T, population_size> next_fitnesses{};
-
-
-			const T range = upper_bound - lower_bound;
 
 			for (std::size_t i{}; i < population_size; ++i)
 			{

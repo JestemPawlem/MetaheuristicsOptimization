@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <format>
 #include <print>
+#include <string>
 #include <string_view>
 
 
@@ -23,24 +24,17 @@ namespace mh::algorithms::pso
 		using value_type = typename Objective::value_type;
 
 		static constexpr std::size_t dimension = Objective::dimension;
-
 		static constexpr std::size_t grid_size =
 			InertiasSize * AccCoefs1Size * AccCoefs2Size;
 
-		static constexpr std::size_t n_csv_params = 3;
-		static constexpr std::size_t n_csv_meta_params = 4;
-
-		static constexpr std::size_t population_size = PopulationSize;
-		static constexpr std::size_t num_iterations = NumIterations;
-
-		static constexpr std::array<std::string_view, n_csv_params> csv_headers =
+		static constexpr std::array<std::string_view, 3> csv_headers =
 		{
 			"inertia",
 			"acc_coef_1",
 			"acc_coef_2"
 		};
 
-		static constexpr std::array<std::string_view, n_csv_meta_params> csv_meta_headers =
+		static constexpr std::array<std::string_view, 4> csv_meta_headers =
 		{
 			"objective",
 			"dimensionality",
@@ -48,47 +42,7 @@ namespace mh::algorithms::pso
 			"num_iterations"
 		};
 
-		constexpr hyperparams(
-			objective_t objective,
-			std::array<value_type, InertiasSize> inertias,
-			std::array<value_type, AccCoefs1Size> acc_coefs_1,
-			std::array<value_type, AccCoefs2Size> acc_coefs_2) :
-			objective_(objective),
-			inertias_(inertias),
-			acc_coefs_1_(acc_coefs_1),
-			acc_coefs_2_(acc_coefs_2)
-		{}
-
-		constexpr const objective_t& objective() const noexcept
-		{
-			return objective_;
-		}
-
-		constexpr value_type inertia(std::size_t id) const noexcept
-		{
-			const std::size_t idx =
-				id / (AccCoefs1Size * AccCoefs2Size);
-
-			return inertias_[idx];
-		}
-
-		constexpr value_type acc_coef_1(std::size_t id) const noexcept
-		{
-			const std::size_t idx =
-				(id / AccCoefs2Size) % AccCoefs1Size;
-
-			return acc_coefs_1_[idx];
-		}
-
-		constexpr value_type acc_coef_2(std::size_t id) const noexcept
-		{
-			const std::size_t idx =
-				id % AccCoefs2Size;
-
-			return acc_coefs_2_[idx];
-		}
-
-		std::array<std::string, n_csv_params> csv_params(std::size_t id) const
+		std::array<std::string, csv_headers.size()> csv_params(std::size_t id) const
 		{
 			return
 			{
@@ -98,7 +52,7 @@ namespace mh::algorithms::pso
 			};
 		}
 
-		std::array<std::string, n_csv_meta_params> csv_meta_params() const
+		std::array<std::string, csv_meta_headers.size()> csv_meta_params() const
 		{
 			return
 			{
@@ -118,6 +72,44 @@ namespace mh::algorithms::pso
 				acc_coef_2(id));
 		}
 
+
+		static constexpr std::size_t population_size = PopulationSize;
+		static constexpr std::size_t num_iterations = NumIterations;
+
+		constexpr hyperparams(
+			objective_t objective,
+			std::array<value_type, InertiasSize> inertias,
+			std::array<value_type, AccCoefs1Size> acc_coefs_1,
+			std::array<value_type, AccCoefs2Size> acc_coefs_2) :
+			objective_(objective),
+			inertias_(inertias),
+			acc_coefs_1_(acc_coefs_1),
+			acc_coefs_2_(acc_coefs_2)
+		{}
+
+		constexpr const objective_t& objective() const noexcept
+		{
+			return objective_;
+		}
+
+		constexpr value_type inertia(std::size_t id) const noexcept
+		{
+			const std::size_t idx = id / (AccCoefs1Size * AccCoefs2Size);
+			return inertias_[idx];
+		}
+
+		constexpr value_type acc_coef_1(std::size_t id) const noexcept
+		{
+			const std::size_t idx = (id / AccCoefs2Size) % AccCoefs1Size;
+			return acc_coefs_1_[idx];
+		}
+
+		constexpr value_type acc_coef_2(std::size_t id) const noexcept
+		{
+			const std::size_t idx = id % AccCoefs2Size;
+			return acc_coefs_2_[idx];
+		}
+
 	private:
 		objective_t objective_;
 
@@ -127,7 +119,6 @@ namespace mh::algorithms::pso
 	};
 
 
-	// deduction guide
 	template <
 		std::size_t PopulationSize,
 		std::size_t NumIterations,

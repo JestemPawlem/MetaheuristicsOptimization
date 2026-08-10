@@ -32,7 +32,7 @@ file(GLOB_RECURSE EXPERIMENT_SOURCES CONFIGURE_DEPENDS
     "src/experiments/*.cpp" "src/experiments/*.h" "src/experiments/*.hpp"
 )
 
-add_executable(experiments ${EXPERIMENT_SOURCES} "src/include/mh/core/hyperparams.h")
+add_executable(experiments ${EXPERIMENT_SOURCES} "src/experiments/de_experiments.h")
 target_include_directories(experiments PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/experiments")
 target_link_libraries(experiments PRIVATE mh)
 set_target_properties(experiments PROPERTIES
@@ -44,5 +44,5 @@ file(GLOB_RECURSE BENCHMARK_SOURCES CONFIGURE_DEPENDS
     "src/benchmarks/*.cpp" "src/benchmarks/*.h" "src/benchmarks/*.hpp"
 )
 
-add_executable(benchmarks ${BENCHMARK_SOURCES} "src/include/mh/core/hyperparams.h")
+add_executable(benchmarks ${BENCHMARK_SOURCES} "src/experiments/de_experiments.h")
 target_link_libraries(benchmarks PRIVATE mh benchmark::benchmark)

@@ -6,19 +6,13 @@
 #include <cstddef>
 #include <limits>
 
-#include <mh/algorithms/pso/pso_hyperparams.h>
-#include <mh/core/objective.h>
-#include <mh/traits/float_traits.h>
+#include <mh/core/hyperparams.h>
 #include <mh/utils/random.h>
 
 
 namespace mh::algorithms::pso
 {
-	template <traits::ieee754_fp T>
-	constexpr T vmax_factor = T{ 0.2 };
-
-
-	template <typename Hyperparams>
+	template <core::hyperparams Hyperparams>
 	struct particle_swarm_optimization
 	{
 		using T = typename Hyperparams::value_type;
@@ -26,6 +20,8 @@ namespace mh::algorithms::pso
 		static constexpr std::size_t Dim = Hyperparams::dimension;
 		static constexpr std::size_t population_size = Hyperparams::population_size;
 		static constexpr std::size_t num_iterations = Hyperparams::num_iterations;
+
+		static constexpr T vmax_factor = T{ 0.2 };
 
 
 		static T run(const Hyperparams& params, std::size_t id)
@@ -39,8 +35,7 @@ namespace mh::algorithms::pso
 			const T acc_coef_1 = params.acc_coef_1(id);
 			const T acc_coef_2 = params.acc_coef_2(id);
 
-			const T vmax = (upper_bound - lower_bound)
-				* vmax_factor<T>;
+			const T vmax = (upper_bound - lower_bound) * vmax_factor;
 
 
 			std::array<T, population_size* Dim> positions{};

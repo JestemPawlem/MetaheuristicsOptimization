@@ -5,9 +5,10 @@
 #include <mh/algorithms/sga/crossover.h>
 #include <mh/algorithms/sga/mutation.h>
 #include <mh/algorithms/sga/selection.h>
-#include <mh/algorithms/sga/sga_hyperparams.h>
+#include <mh/algorithms/sga/hyperparams.h>
 #include <mh/algorithms/sga/simple_genetic_algorithm.h>
 #include <mh/objectives/rastrigin.h>
+#include <mh/objectives/rosenbrock.h>
 #include <mh/utils/series.h>
 
 #include "runner.h"
