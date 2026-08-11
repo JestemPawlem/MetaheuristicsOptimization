@@ -15,6 +15,8 @@ namespace mh::objectives
 	{
 		constexpr T operator()(const T* __restrict x) const noexcept
 		{
+			using namespace utils::math;
+
 			T sum_sq{};
 			T sum_cos{};
 
@@ -22,7 +24,7 @@ namespace mh::objectives
 			{
 				T xi = x[i] - sqrt_2<T>;
 				sum_sq += pow2(xi);
-				sum_cos += core::cos_two_pi(xi);
+				sum_cos += cos_two_pi(xi);
 			}
 
 			T term1 = T{ -20 } * std::exp(-T{ 0.2 } * std::sqrt(sum_sq / Dim));
@@ -35,7 +37,9 @@ namespace mh::objectives
 	template <traits::ieee754_fp T, std::size_t Dim>
 	auto ackley_objective()
 	{
-		return objective<ackley<T, Dim>, T, Dim>
+		using namespace utils::math;
+
+		return core::objective<ackley<T, Dim>, T, Dim>
 		{
 			{ T{ -32.768 + sqrt_2<T> }, T{ 32.768 + sqrt_2<T> } },
 				"ackley"

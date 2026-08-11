@@ -5,10 +5,8 @@
 #include <concepts>
 #include <cstddef>
 #include <limits>
-
 #include <mh/core/hyperparams.h>
 #include <mh/utils/random.h>
-
 
 namespace mh::algorithms::pso
 {
@@ -23,7 +21,6 @@ namespace mh::algorithms::pso
 
 		static constexpr T vmax_factor = T{ 0.2 };
 
-
 		static T run(const Hyperparams& params, std::size_t id)
 		{
 			namespace random = utils::random;
@@ -31,12 +28,13 @@ namespace mh::algorithms::pso
 			const auto& objective = params.objective();
 			const auto [lower_bound, upper_bound] = objective.bounds;
 
-			const T inertia = params.inertia(id);
+			const auto& inertia_policy = params.inertia_policy(id);
+
+			const T initial_inertia = params.inertia(id);
 			const T acc_coef_1 = params.acc_coef_1(id);
 			const T acc_coef_2 = params.acc_coef_2(id);
 
 			const T vmax = (upper_bound - lower_bound) * vmax_factor;
-
 
 			std::array<T, population_size* Dim> positions{};
 			std::array<T, population_size* Dim> velocities{};
@@ -60,7 +58,7 @@ namespace mh::algorithms::pso
 						(upper_bound - lower_bound);
 
 					velocities[offset + d] =
-						random::value<T>() * 2 * vmax - vmax;
+						(random::value<T>() * T { 2.0 } - T{ 1.0 })* (vmax * T{ 0.1 });
 
 					best_personal_positions[offset + d] =
 						positions[offset + d];
@@ -81,6 +79,8 @@ namespace mh::algorithms::pso
 
 			for (std::size_t i{}; i < num_iterations; ++i)
 			{
+				const T current_inertia = inertia_policy(i, num_iterations, initial_inertia);
+
 				for (std::size_t p{}; p < population_size; ++p)
 				{
 					const std::size_t offset = p * Dim;
@@ -94,7 +94,7 @@ namespace mh::algorithms::pso
 						T& position = positions[offset + d];
 
 						velocity =
-							velocity * inertia
+							velocity * current_inertia
 							+ (best_personal_positions[offset + d] - position)
 							* (r1 * acc_coef_1)
 							+ (best_global_position[d] - position)
@@ -107,10 +107,16 @@ namespace mh::algorithms::pso
 
 						position += velocity;
 
-						position = std::clamp(
-							position,
-							lower_bound,
-							upper_bound);
+						if (position < lower_bound)
+						{
+							position = lower_bound;
+							velocity = -velocity;
+						}
+						else if (position > upper_bound)
+						{
+							position = upper_bound;
+							velocity = -velocity;
+						}
 					}
 
 					const T fitness = objective(positions.data() + offset);
@@ -119,15 +125,12 @@ namespace mh::algorithms::pso
 					{
 						best_personal_fitnesses[p] = fitness;
 
-						for (std::size_t d{}; d < Dim; ++d)
-							best_personal_positions[offset + d] = positions[offset + d];
-
+						std::copy_n(positions.data() + offset, Dim, best_personal_positions.data() + offset);
 
 						if (fitness < best_global_fitness)
 						{
 							best_global_fitness = fitness;
-							std::copy_n(positions.data() + offset, Dim,
-								best_global_position.begin());
+							std::copy_n(positions.data() + offset, Dim, best_global_position.begin());
 						}
 					}
 				}
